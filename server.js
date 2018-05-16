@@ -1,7 +1,8 @@
-const express=require('express');
-const hbs=require('hbs');
+ const express=require('express');
+ const hbs=require('hbs');
 const fs=require('fs');
-var app=express();
+ var app=express();
+ const port=process.env.PORT||3000;
 hbs.registerPartials(__dirname+'/views/partials');
 app.use((req,res,next)=>{
     var now=new Date().toString();
@@ -10,9 +11,7 @@ app.use((req,res,next)=>{
     fs.appendFile('server.log',log+'\n');
     next();
 });
-// app.use((req,res,next)=>{
-//     res.render('maintenance.hbs');
-// });
+
 hbs.registerHelper('getCurrentYear',()=>{
     return new Date().getFullYear();
 });
@@ -20,14 +19,14 @@ hbs.registerHelper('screamIt',(text)=>{
     return text.toUpperCase();
 });
 
-app.set('view engine','hbs');
-app.use(express.static(__dirname+'/public'));
+ app.set('view engine','hbs');
+ app.use(express.static(__dirname+'/public'));
 app.get('/',(req,res)=>{
-    //res.send('<h1>Hello Express</h1>');
-    // res.send({
-    //     name:'rahul',
-    //     likes:['Biking','Cities']
-    // }); 
+    res.send('<h1>Hello Express</h1>');
+    res.send({
+        name:'rahul',
+        likes:['Biking','Cities']
+    }); 
     res.render('home.hbs',{
         pageTitle:'Home Page',
         welcomeMessage:'Welcome to my website'
@@ -48,4 +47,6 @@ app.get('/bad',(req,res)=>{
     });
     
 });
-app.listen(3000);
+ app.listen(port,()=>{
+     console.log(`Server is up on port ${port}`);
+ });
